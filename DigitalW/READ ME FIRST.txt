@@ -1,0 +1,44 @@
+the first line of every paragraph is the name of the file
+the rest of the paragraph is description
+only care about the files i mentioned here
+
+
+
+
+
+firebase
+for customer
+have the code for the customer to key in their order number followed by phone number
+the data is send to firebase
+
+
+
+frontend to send orders
+for cashier
+have the code to upload the orders after payment to firebase
+it will be sorted out to optimise the cooking time
+all the same orders will be clumped together
+cannot enter input same time as backend for chef
+
+
+
+backend for chef
+for chef
+display a optimised orders list
+enable the chef to input what he have cooked so can delete it off the list
+cannot enter input same time as frontend to send orders
+
+
+
+PIR
+nothing much, just code for the LEDs around the screen to light up when someone is near
+save electricity through the use of PIR sensor
+
+
+
+link to twilio
+for cashier
+cashier will key in order number
+the code will use the order number to retrieve the phone number from firebase
+then send a message to the phone
+**if cashier key in an order number that is not in the database, it will crash

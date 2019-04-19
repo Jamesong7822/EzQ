@@ -1,0 +1,20 @@
+<mainWindow>:
+    orientation: "vertical"
+    spacing: 50
+    Label:
+        id: name
+        text: "Input your number"
+        font_size: 100
+        
+    TextInput:
+        id: Order
+        hint_text: 'Order number'
+        font_size: 40
+    TextInput:
+        id: Phone
+        hint_text: "Phone number"
+        font_size: 40
+    Button:
+        text: "Submit"
+        font_size: 50
+        on_press: root.send_info()

@@ -1,0 +1,59 @@
+ScreenManager:
+    id: screen_manager
+    OrderScreen:
+        id: order_screen
+        name: "OrderScreen"
+        manager: screen_manager
+
+    SubmitScreen:
+        id: submit_screen
+        name: "SubmitScreen"
+        manager: screen_manager
+
+<OrderScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        spacing: 50
+
+        Label:
+            id: name
+            text: "Input your number"
+            font_size: 100
+
+        TextInput:
+            unfocus_on_touch: False
+            id: Order
+            hint_text: 'Order number'
+            font_size: 40
+            on_focus:
+                root.set_pop_up("Order Number")
+
+        TextInput:
+            unfocus_on_touch: False
+            id: Phone
+            hint_text: "Phone number"
+            font_size: 40
+            on_focus:
+                root.set_pop_up("Phone Number")
+
+        Button:
+            text: "Submit"
+            font_size: 50
+            on_press:
+                app.send_info(root.ids.Order.text, root.ids.Phone.text)
+                root.ids.Order.text=""
+                root.ids.Phone.text=""
+                root.manager.current="SubmitScreen"
+
+<SubmitScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        Label:
+            text: "Successfully Submitted"
+            font_size: 60
+        Button:
+            text: "Return"
+            size_hint: (1, 0.2)
+            font_size: 30
+            on_press:
+                root.manager.current="OrderScreen"

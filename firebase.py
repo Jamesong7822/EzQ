@@ -1,12 +1,20 @@
 #################################################
 # Property of EZQ
-# LAST MODIFIED BY: Jamesong7822 @ 030419
+# LAST MODIFIED: Jamesong7822 @ 190419
 #################################################
 
 #################################################
 """
 This firebase class is written to modularise the
 project.
+
+This script is used as an import for database
+updating functionalities required by EzQ service.
+It has the following methods:
+    - connect: Connect to firebase
+    - get_keys: Get top level keys
+    - update: Update entry in firebase
+    - get_data: Pulls data from firebase
 """
 #################################################
 
@@ -42,6 +50,14 @@ class Firebase():
 
     @prints("loading", CREDENTIALS_PATH, "loaded", "ok")
     def __init__(self):
+        """
+        Initialization of firebase class
+
+        Attributes
+        ----------
+        self.config         : dict
+            Config details to authenticate firebase
+        """
         # Credentials loading
         with open(CREDENTIALS_PATH, "r") as f:
             self.config = {"databaseURL": f.readline().strip(),
@@ -53,6 +69,16 @@ class Firebase():
 
     @prints("connecting", "", "connected")
     def connect(self):
+        """
+        Method connects to firebase database
+
+        Returns
+        -------
+        - self.firebase     : object
+            Firebase object
+        - self.db           : object
+            Database object
+        """
         # Connect to Firebase with loaded Credentials
         self.firebase = pyrebase.initialize_app(self.config)
 
@@ -60,6 +86,14 @@ class Firebase():
         self.db = self.firebase.database()
 
     def get_keys(self):
+        """
+        Method grabs keys from database
+
+        Returns
+        -------
+        - keys      : list
+            Associated header keys in database
+        """
         # Grabs header keys from database object
         keys = [x for x in self.db.child().get().val()]
         if DEBUG:
@@ -68,16 +102,40 @@ class Firebase():
 
     @prints("updating", "", "updated", "ok")
     def update(self, key, data):
+        """
+        Method updates existing entry in database
+
+        Parameters
+        ----------
+        - key       : string
+            Key to update database with
+        - data      : dict
+            Associated data to update database with
+
+        Returns
+        -------
+        None
+        """
         # Updates existing entry in database
         #self.db.child(key).remove()
         self.db.child(key).update(data)
 
-    @prints("Adding", "", "Added", "ok")
-    def add(self, key, data):
-        # Adds new entry in database
-        self.db.child(key).set(data)
-
     def get_data(self, key):
+        """
+        Method grabs data from selected key
+        in database
+
+        Parameters
+        ----------
+        - key       : string
+            Key to pull data from
+
+        Returns
+        -------
+        - data      : dict
+            Associated data from input key
+            in database
+        """
         # Grabs data from database using specified key
         return self.db.child(key).get().val()
 
@@ -85,4 +143,3 @@ if __name__ == "__main__":
     a = Firebase()
     a.connect()
     data = a.get_data("image")
-    #print(data)

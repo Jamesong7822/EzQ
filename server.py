@@ -97,9 +97,11 @@ class EzQServer():
         # Connect to firebase
         self.firebase = Firebase()
         self.firebase.connect()
+
+        # Load detection module
         self.load_darknet()
 
-        # Set up Variables
+        # Init Variables
         self.screen_w = SCREEN_SIZE[0]
         self.screen_h = SCREEN_SIZE[1]
         self.done = False
@@ -115,8 +117,17 @@ class EzQServer():
 
     def extract_data(self, data):
         """
-        Input: list object from realtime database
-        Output: np.uint8 array for cv2, darknet
+        Method coverts pulled data to array
+
+        Parameters
+        ----------
+        - data : list
+            Pulled data from the list
+
+        Returns
+        -------
+        - data : array
+            Associated array data
         """
         #print (type(data))
         #print(data[0])
@@ -135,13 +146,39 @@ class EzQServer():
 
     def pull_snaptime(self):
         """
-        Pulls snaptime of pulled image
+        Method gets snaptime and updates self.snaptime
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        self.snaptime : integer
+            Last snaptime as per record on database
         """
         self.snaptime = self.firebase.get_data("snaptime")["time"]
 
     @prints("pulling", "firebase image", "pulled", "ok")
     def pull_image(self):
         """
+        Method pulls image data
+
+        Parameters
+        ----------
+        None
+
+        Calls
+        -----
+        - self.firebase.get_data    : Method
+            Grabs image data
+        - self.extract_data         : Method
+            Converts pulled image data to array
+
+        Returns
+        -------
+        - image_data                : array
+            Raw image data
         Pulls image array from firebase
         """
         image = self.firebase.get_data("image")
@@ -155,6 +192,22 @@ class EzQServer():
         return image_data
 
     def load_darknet(self):
+        """
+        Method loads darknet detection module
+
+        Parameters
+        ----------
+        None
+
+        Calls
+        -----
+        Detector : Class
+            Detector class
+
+        Returns
+        -------
+        None
+        """
         self.net = Detector(bytes(YOLOV3_PATH, encoding=ENCODING),\
                             bytes(WEIGHTS_PATH, encoding=ENCODING),0,\
                             bytes(COCO_DATA_PATH, encoding=ENCODING),\
@@ -162,9 +215,30 @@ class EzQServer():
     @prints("Detecting", "Pulled Image", "detected", "ok")
     def detect(self, image):
         """
-        Method takes in image data as input and outputs
-        an image with rects and number of detected
-        people
+        Method applies detection on image
+
+        Parameters
+        ----------
+        - image : array
+            Image data
+
+        Calls
+        -----
+        - Image : class
+            Image conversion class to convert image
+            to correct format for detection
+        - self.net.detect : Method
+            Method for detecting
+        - self.draw_rects : Method
+            Draws bounding boxes for detected objects
+
+        Returns
+        -------
+        - img_copy : Array
+            Copy of image with rects drawn on
+            for display purposes
+        - people_count : Integer
+            Associated detected people count
         """
         # Convert image to specific format for darknet processing
         darknet_image = Image(image)
@@ -186,9 +260,19 @@ class EzQServer():
 
     def draw_rects(self, image, rects):
         """
-        Method takes in detected rects and draws them
-        over the pulled image
-        Returns the drawn on image
+        Method draws bounding boxes
+
+        Parameters
+        ----------
+        - image : array
+            Image to draw rect on
+        - rects : tuple
+            Bounding box data (centerx, centery, width, height)
+
+        Returns
+        -------
+        - img : array
+            Associated image after bounding boxes are drawn on
         """
         x, y, w, h = rects
         img = cv2.rectangle(image, (int(x-w/2),int(y-h/2)),(int(x+w/2),int(y+h/2)), RECT_COLOR, RECT_THICKNESS)
@@ -197,12 +281,28 @@ class EzQServer():
 
     def update(self):
         """
-        Method is called to update current image from the Firebase
-        Updates class attributes
+        Method updates current image and respective
+        class attributes
+
+        Parameters
+        ----------
+        None
+
+        Calls
+        -----
+        - self.pull_snaptime : Method
+            Get snaptime of image
+        - self.pulls_image : Method
+            Get image
+        - server.detect : Method
+            Get detection
+
+        Returns
+        -------
+        self.detect_img : array
+            Image with bounding rects
         """
         self.pull_snaptime()
-        self.raw_image = server.pull_image()
-        lag_time = time.time() - self.snaptime
         start_time = time.time()
         self.detect_img, self.people_count = server.detect(self.raw_image)
         end_time = time.time()
@@ -211,7 +311,16 @@ class EzQServer():
 
     def show_detections(self):
         """
-        Method is called to show detected image from darknet
+        Method is called to show detected image
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        - img : cv2 object
+            Detection image
         """
         cv2.imshow(TITLE, self.detect_img)
 

@@ -11,7 +11,6 @@ project.
 This script is used as an import for messenging
 functionalities required by the EzQ service.
 It has the following methods:
-    -
 
 Requirements: firebase.py by Wei Song
 """
@@ -20,6 +19,7 @@ Requirements: firebase.py by Wei Song
 #------------------IMPORTS----------------------#
 from firebase import Firebase, prints
 from twilio.rest import Client
+from time import sleep
 
 #-----------------------------------------------#
 
@@ -67,7 +67,7 @@ class twilio_handler():
 
         #Connect to the twilio API
         self.client = Client(self.config['account_sid'],self.config['auth_token'])
-
+        self.running = True
     def get_order(self):
         """
         Method gets order data from database

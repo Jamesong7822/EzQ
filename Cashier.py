@@ -202,6 +202,7 @@ class SubmitScreen(Screen):
         new_order_dict['ready'] = False
         new_order_dict['addit_info'] = self.additional_info
         new_order_dict['time_waited'] = 0
+        new_order_dict['id'] = self.customer_id
         print('adding new id ' + str(new_id) + ' and data ' + str(new_order_dict))
         self.firebase.update(["orders", STORE_NAME], {new_id:new_order_dict})
         #update that the customer is served

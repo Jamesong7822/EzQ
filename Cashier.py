@@ -136,7 +136,7 @@ class SubmitScreen(Screen):
 
         # Get keys - order nums
         key = []
-        for customer_id,customer in data.items():
+        for customer_id, customer in data.items():
             if customer['served'] == False:
                 key.append(customer_id)
 #        key = [x for x in data]

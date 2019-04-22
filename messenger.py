@@ -67,7 +67,7 @@ class twilio_handler():
 
         #Connect to the twilio API
         self.client = Client(self.config['account_sid'],self.config['auth_token'])
-
+        self.running = True
     def get_order(self):
         """
         Method gets order data from database

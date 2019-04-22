@@ -140,7 +140,7 @@ class EzQServer():
                    #if char not in ["[", "]", "\n"]]
 
             extract.append(row_rgb)
-        print(extract[0])
+        #print(extract[0])
 
         return np.uint8(extract)
 
@@ -372,7 +372,7 @@ if __name__ == "__main__":
             server.done = True
 
         elif time.time() - server.last_pull > UPDATE_RATE:
-            print ("UPDATE")
+            #print ("UPDATE")
             server.update()
 
     #server.testrun()

@@ -186,7 +186,7 @@ class SubmitScreen(Screen):
         # Get the current order ids
         order_data = self.firebase.get_data("orders")
         store_order_data = order_data[STORE_NAME]
-        
+
         # Used ids
         used_ids = []
         for order_id,item in store_order_data.items():
@@ -203,11 +203,12 @@ class SubmitScreen(Screen):
         new_order_dict['addit_info'] = self.additional_info
         new_order_dict['time_waited'] = 0
         new_order_dict['id'] = self.customer_id
+        new_order_dict["order_time"] = int(time.time())
         print('adding new id ' + str(new_id) + ' and data ' + str(new_order_dict))
         self.firebase.update(["orders", STORE_NAME], {new_id:new_order_dict})
         #update that the customer is served
         self.firebase.update(["customers",self.customer_id],{'served':True})
-        
+
 
     def check_nums(self):
         if self.state != "down":

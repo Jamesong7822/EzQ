@@ -28,7 +28,7 @@ from firebase import Firebase
 #==================CONSTANTS====================#
 TEST_IMAGE_PATH="index.jpeg"
 CAM=0 # Use 0 for RPI and 1 for PC
-UPDATE_RATE = 20 # seconds
+UPDATE_RATE = 30 # seconds
 RUNFOR = 100000000000 # seconds
 #===============================================#
 
@@ -165,7 +165,7 @@ class RPI():
 
 if __name__ == "__main__":
     R = RPI()
-    R.run("test")
+    R.run()
     cv2.destroyAllWindows()
     R.cap.release()
     elapsed_time = time.time()-R.start_time

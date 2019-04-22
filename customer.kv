@@ -11,6 +11,17 @@ ScreenManager:
         manager: screen_manager
 
 <OrderScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
+    orientation: "vertical"
+    spacing: 50
+
     BoxLayout:
         orientation: "vertical"
         spacing: 50
@@ -18,39 +29,58 @@ ScreenManager:
         Label:
             id: name
             text: "Input your number"
-            font_size: 100
+            font_size: 50
+            color: 0.1, 0.5, 0.81, 1
 
-        TextInput:
-            unfocus_on_touch: False
-            id: Order
-            hint_text: 'Order number'
-            font_size: 40
-            on_focus:
-                root.set_pop_up("Order Number")
 
-        TextInput:
-            unfocus_on_touch: False
-            id: Phone
-            hint_text: "Phone number"
-            font_size: 40
-            on_focus:
-                root.set_pop_up("Phone Number")
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'EzQ'
+                font_size: 70
+                color: 0.1, 0.5, 0.81, 1
+
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: ''
+                size_hint_x: 2
+            TextInput:
+                unfocus_on_touch: False
+                id: Phone
+                hint_text: "Phone number"
+                font_size: 50
+                size_hint_x: 6
+                on_touch_down:
+                    root.set_pop_up("Phone Number")
+            Label:
+                text: ''
+                size_hint_x: 2
+
 
         Button:
             text: "Submit"
             font_size: 50
             on_press:
-                app.send_info(root.ids.Order.text, root.ids.Phone.text)
-                root.ids.Order.text=""
+                app.send_info(root.ids.Phone.text)
                 root.ids.Phone.text=""
                 root.manager.current="SubmitScreen"
 
 <SubmitScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
     BoxLayout:
         orientation: "vertical"
         Label:
             text: "Successfully Submitted"
             font_size: 60
+            color: 0.1, 0.5, 0.81, 1
         Button:
             text: "Return"
             size_hint: (1, 0.2)

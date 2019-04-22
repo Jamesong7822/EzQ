@@ -101,14 +101,14 @@ class Firebase():
         return keys
 
     @prints("updating", "", "updated", "ok")
-    def update(self, key, data):
+    def update(self, keys, data):
         """
         Method updates existing entry in database
 
         Parameters
         ----------
-        - key       : string
-            Key to update database with
+        - keys       : list
+            Key(s) to update database with
         - data      : dict
             Associated data to update database with
 
@@ -118,7 +118,10 @@ class Firebase():
         """
         # Updates existing entry in database
         #self.db.child(key).remove()
+        key = "/".join(keys)
         self.db.child(key).update(data)
+        # for x in key:
+        #     self.db.child(x)
 
     def get_data(self, key):
         """

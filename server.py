@@ -140,7 +140,7 @@ class EzQServer():
                    #if char not in ["[", "]", "\n"]]
 
             extract.append(row_rgb)
-        #print(extract[0])
+        print(extract[0])
 
         return np.uint8(extract)
 
@@ -292,7 +292,7 @@ class EzQServer():
         -----
         - self.pull_snaptime : Method
             Get snaptime of image
-        - self.pulls_image : Method
+        - self.pull_image : Method
             Get image
         - server.detect : Method
             Get detection
@@ -303,11 +303,16 @@ class EzQServer():
             Image with bounding rects
         """
         self.pull_snaptime()
+        self.raw_image = self.pull_image()
+        lag_time = time.time() - self.snaptime
         start_time = time.time()
         self.detect_img, self.people_count = server.detect(self.raw_image)
         end_time = time.time()
         print ("Detection took {} seconds".format(end_time - start_time))
         print ("{} People Detected in Queue {} Seconds ago".format(self.people_count, lag_time))
+
+        # Update firebase people count
+        self.firebase.update("people_count", {"people_count": self.people_count})
 
     def show_detections(self):
         """
@@ -333,7 +338,7 @@ class EzQServer():
         self.show_detections()
 
     def testrun(self):
-        self.raw_img = server.pull_image()
+        self.raw_image = server.pull_image()
         start_time = time.time()
         self.detect_img, self.people_count = server.detect(img)
         end_time = time.time()

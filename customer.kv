@@ -24,22 +24,18 @@ ScreenManager:
 
     BoxLayout:
         orientation: "vertical"
-        spacing: 50
+        spacing: 30
 
         Label:
             id: name
             text: "Input your number"
             font_size: 50
-            color: 0.1, 0.5, 0.81, 1
+            color: 0.1, 0.5, 0.81, 1                
 
+        Image:
+            source: 'DW 1D-02.png'
 
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                text: 'EzQ'
-                font_size: 70
-                color: 0.1, 0.5, 0.81, 1
-
+                
         BoxLayout:
             orientation: 'horizontal'
             Label:
@@ -49,14 +45,17 @@ ScreenManager:
                 unfocus_on_touch: False
                 id: Phone
                 hint_text: "Phone number"
-                font_size: 50
+                font_size: 40
                 size_hint_x: 6
+                size_hint_y: None
+                height: 50
                 on_touch_down:
                     root.set_pop_up("Phone Number")
             Label:
                 text: ''
                 size_hint_x: 2
 
+        
 
         Button:
             text: "Submit"

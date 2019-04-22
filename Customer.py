@@ -21,7 +21,7 @@ import time
 import json
 
 from time import sleep
-from firebase import Firebase
+from firebaseclass import Firebase
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -32,6 +32,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.popup import Popup
 from kivy.core.window import Window
 from kivy.uix.widget import Widget
+from kivy.uix.image import Image
 
 #=================+CONSTANTS====================#
 os.environ["KIVY_GL_BACKEND"] = "gl"
@@ -135,8 +136,8 @@ class CustomerApp(App):
         print(customer_data)
         used_ids = []
         for customer_id, customer_data in customer_data.items():
-            #check if the mobile number exists yet
-            if customer_data['mobile'] == '+65' + phone:
+            #check if the mobile number exists yet            
+            if customer_data['mobile'] == '+65' + phone: 
                 #update db
                 customer_data["served"] = False
                 self.firebase.db.child('customers').child(customer_id).update(customer_data)
@@ -145,8 +146,7 @@ class CustomerApp(App):
             #if not,
             else:
                 used_ids.append(customer_id)
-#        print(current_no)
-        print(used_ids)
+        
         new_id = None
         if exists == False:
             #the phone number is new
@@ -158,7 +158,7 @@ class CustomerApp(App):
             #update db
             customer_dict = {'mobile': '+65' + phone, "served": False, 'service': "whatsapp"}
             self.firebase.db.child('customers').child(new_id).update(customer_dict)
-
+        
 
     def build(self):
         pass

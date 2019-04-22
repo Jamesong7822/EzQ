@@ -118,8 +118,11 @@ class Firebase():
         """
         # Updates existing entry in database
         #self.db.child(key).remove()
-        key = "/".join(keys)
-        self.db.child(key).update(data)
+        if isinstance(keys, str):
+            self.db.child(keys).update(data)
+        else:
+            key = "/".join(keys)
+            self.db.child(key).update(data)
         # for x in key:
         #     self.db.child(x)
 

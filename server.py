@@ -1,6 +1,6 @@
 #################################################
 # Property of EZQ
-# LAST MODIFIED: Jamesong7822 @ 190419
+# LAST MODIFIED: 220419
 #################################################
 
 #################################################
@@ -330,6 +330,21 @@ class EzQServer():
         cv2.imshow(TITLE, self.detect_img)
 
     def run(self):
+        """
+        Method runs script in sequence
+
+        Parameters
+        ----------
+        None
+
+        Calls
+        -----
+        self.update : Method
+            Updates current image and respective class attributes
+        self.show_detections : Method
+            Shows detection image
+
+        """
         # At first run
         if self.raw_image is None:
             self.update()

@@ -1,6 +1,6 @@
 #################################################
 # Property of EZQ
-# LAST MODIFIED: Jamesong7822 @ 190419
+# LAST MODIFIED: 220419
 #################################################
 
 #################################################
@@ -123,8 +123,6 @@ class Firebase():
         else:
             key = "/".join(keys)
             self.db.child(key).update(data)
-        # for x in key:
-        #     self.db.child(x)
 
     def get_data(self, key):
         """

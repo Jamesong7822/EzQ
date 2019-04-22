@@ -1,6 +1,6 @@
 #################################################
 # Property of EZQ
-# LAST MODIFIED: SirGreat @ 190419
+# LAST MODIFIED: 220419
 #################################################
 
 #################################################
@@ -11,6 +11,11 @@ project.
 This script is used as an import for messenging
 functionalities required by the EzQ service.
 It has the following methods:
+    - get_order : get orders from database
+    - parse_orders : decode orders from database
+    - store_order : store order details locally
+    - create_message : create message object
+    - run : run the entire system
 
 Requirements: firebase.py by Wei Song
 """

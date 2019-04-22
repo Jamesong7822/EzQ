@@ -1,23 +1,30 @@
-from libdw import pyrebase
-from kivy.app import App
-from kivy.uix.boxlayout import BoxLayout
-import firebase_admin
-from firebase_admin import credentials, firestore
+from firebase import Firebase
 
-cred=credentials.Certificate("temp.json")
-FireBase=firebase_admin.initialize_app(cred)
+firebaseInstance = Firebase()
+firebaseInstance.connect()
+
+
+#------------------------CONSTANTS--------------------------------
+store_name = 'Western Food'
+#-----------------------------------------------------------------
+
 
 while True:  #infinite loop
+    order_id=input('Please input the order number:')
+    try:
+        order_data = firebaseInstance.get_data("orders")
+        store_order_data = order_data[store_name]
+        customer_id = store_order_data[order_id]['id']
+        try:
+            customer_data = firebaseInstance.get_data("customers")
+            phone_num = customer_data[customer_id]['mobile']
+            print('we will send a message to ' + phone_num + ' through twilio')
+            firebaseInstance.db.child('orders').child('{}'.format(store_name)).child('{}'.format(order_id)).update({"ready":True})
+        except:
+            print('Error, the customer_id does not exist')
+    except:
+        print('Error, the order id specified does not exist')
 
-    db=firestore.client()
-    
-    collection= db.collection(u'user')  #collection
-    
-    order_num=input('Please input the order number')
-    
-    output = collection.document(order_num).get() # This will return you a Google cloud object
-    phone_num = output.to_dict()['Phone number'] # use .to_dict() method to convert output to a python dictionary
-    print('we will send a message to '+phone_num+' through twilio')
     
     
 

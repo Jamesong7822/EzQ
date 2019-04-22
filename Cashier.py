@@ -135,13 +135,21 @@ class SubmitScreen(Screen):
         #print(data)
 
         # Get keys - order nums
-        key = [x for x in data]
+        key = []
+        for customer_id,customer in data.items():
+            if customer['served'] == False:
+                key.append(customer_id)
+#        key = [x for x in data]
 
         # Sort the keys list
         sorted(key, reverse=True)
 
         # Get the top 3 numbers based on top 3 keys
-        self.nums = [x["mobile"] for x in [data[y] for y in key[:3]]]
+        self.nums = []
+        for k in key:
+            d = data[k]
+            self.nums.append(k + ':' + d['mobile'])
+#        self.nums = [x["mobile"] for x in [data[y] for y in key[:3]]]
 
         return self.nums
 
@@ -149,6 +157,7 @@ class SubmitScreen(Screen):
         tb = togglebutton
         self.num = str(tb.text)
         self.state = str(tb.state)
+        self.customer_id = tb.text.split(':')[0]
 
     def update_nums_layout(self):
         self.nums = self.get_nums()
@@ -195,6 +204,9 @@ class SubmitScreen(Screen):
         new_order_dict['time_waited'] = 0
         print('adding new id ' + str(new_id) + ' and data ' + str(new_order_dict))
         self.firebase.update(["orders", STORE_NAME], {new_id:new_order_dict})
+        #update that the customer is served
+        self.firebase.update(["customers",self.customer_id],{'served':True})
+        
 
     def check_nums(self):
         if self.state != "down":

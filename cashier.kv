@@ -1,5 +1,8 @@
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+
 ScreenManager:
     id: screen_manager
+    transition: NoTransition()
     MenuScreen:
         id: menu_screen
         name: "MenuScreen"

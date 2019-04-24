@@ -92,4 +92,3 @@ This section will introduce in greater detail about our scripts as well as the r
    - `cashier.py`: `Cashier side GUI` for Cashier to submit orders and tag it with phone number inputs from `customer.py`
    - `chefgui.py`: `Chef side GUI` for chef to update completed orders, which triggers `messenger.py`to prompt relevant customers through `Whatsapp`.
    - `server.py`: `Cloud based or Local Computer based Backend`for running of the detection module to identify number of people in queue.
-

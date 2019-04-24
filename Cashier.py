@@ -55,9 +55,9 @@ class MenuScreen(Screen):
         self.btns = []
         self.firebase = FIREBASE
 
-        menu_list = ["Chicken Chop Spaghetti", "Grilled Fish Spaghetti", "C", "D", "E", "F"]
+        menu_list = ["Chicken Chop Spaghetti", "Grilled Fish Spaghetti", "Chicken Cubes with Rice", "Aglio Olio", "Mexican Chicken Chop", "Chicken Chop with Fries"]
         for i in menu_list:
-            btn = ToggleButton(text=i, group="menu")
+            btn = ToggleButton(text=i, group="menu", font_size = 20, background_normal='', background_color=[0.96, 0.54, 0.41, 1], markup = True)
             btn.bind(on_press = self.get_order)
             self.btns.append(btn)
             self.grid.add_widget(btn)
@@ -136,7 +136,7 @@ class SubmitScreen(Screen):
 
         # Get keys - order nums
         key = []
-        for customer_id, customer in data.items():
+        for customer_id,customer in data.items():
             if customer['served'] == False:
                 key.append(customer_id)
 #        key = [x for x in data]
@@ -186,7 +186,7 @@ class SubmitScreen(Screen):
         # Get the current order ids
         order_data = self.firebase.get_data("orders")
         store_order_data = order_data[STORE_NAME]
-
+        
         # Used ids
         used_ids = []
         for order_id,item in store_order_data.items():
@@ -208,7 +208,7 @@ class SubmitScreen(Screen):
         self.firebase.update(["orders", STORE_NAME], {new_id:new_order_dict})
         #update that the customer is served
         self.firebase.update(["customers",self.customer_id],{'served':True})
-
+        
 
     def check_nums(self):
         if self.state != "down":

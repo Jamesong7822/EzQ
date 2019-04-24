@@ -1,8 +1,5 @@
-#:import NoTransition kivy.uix.screenmanager.NoTransition
-
 ScreenManager:
     id: screen_manager
-    transition: NoTransition()
     MenuScreen:
         id: menu_screen
         name: "MenuScreen"
@@ -14,6 +11,14 @@ ScreenManager:
         manager: screen_manager
 
 <MenuScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            
     grid: Grid
 
     BoxLayout:
@@ -23,6 +28,7 @@ ScreenManager:
             text: "Menus"
             font_size: "50sp"
             size_hint: (1, 0.2)
+            color: 0.1, 0.5, 0.81, 1  
 
         GridLayout:
             rows: 3
@@ -40,6 +46,7 @@ ScreenManager:
             Label:
                 text: "Additional information"
                 font_size: dp(30)
+                color: 0.96, 0.75, 0.12, 1  
 
             TextInput:
                 text: ""
@@ -47,6 +54,9 @@ ScreenManager:
 
         Button:
             text: "Submit"
+            font_size: 20
+            background_normal: ''
+            background_color: 0.55, 0.65, 0.7, 1
             size_hint: (1, 0.2)
             on_release:
                 root.get_additional_info()
@@ -54,6 +64,14 @@ ScreenManager:
 
 
 <SubmitScreen>:
+
+    canvas.before:
+        Color:
+            rgba: 1, 1, 1, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     BoxLayout:
         orientation: "vertical"
         id: boxy
@@ -62,11 +80,13 @@ ScreenManager:
             text: "Order: " + root.order
             font_size: dp(30)
             size_hint: (1, 0.2)
+            color: 0.96, 0.54, 0.41, 1            
 
         Label:
             text: "Additional info: " + root.additional_info
             font_size: dp(30)
             size_hint: (1, 0.2)
+            color: 0.1, 0.5, 0.81, 1 
 
         BoxLayout:
             orientation: "vertical"
@@ -81,12 +101,18 @@ ScreenManager:
 
             Button:
                 text: "Back"
+                font_size: 20
+                background_normal: ''
+                background_color: 0.55, 0.65, 0.7, 1
                 size_hint: (0.5, 1)
                 on_release:
                     root.manager.current="MenuScreen"
 
             Button:
                 text: "Submit"
+                font_size: 20
+                background_normal: ''
+                background_color: 0.55, 0.65, 0.7, 1
                 size_hint: (0.5, 1)
                 on_release:
                     root.check_nums()

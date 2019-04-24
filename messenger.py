@@ -26,6 +26,7 @@ from firebase import Firebase, prints
 from twilio.rest import Client
 from time import sleep
 import time
+import datetime
 
 #-----------------------------------------------#
 
@@ -73,6 +74,20 @@ class twilio_handler():
         #Connect to the twilio API
         self.client = Client(self.config['account_sid'],self.config['auth_token'])
         self.running = True
+        self.last_message_timing = datetime.datetime.now()
+        
+#        #print all messages between now and 5 seconds ago
+#        messages = self.client.messages.list(date_sent_before=datetime.datetime.now(),
+#                                           date_sent_after=datetime.datetime.now() - datetime.timedelta(seconds=5))
+#        
+#        for record in messages:
+#            print(record.body)
+#        
+#        #print a datetime
+#        print(datetime.datetime(2019, 4, 25, 0, 0))
+#
+        
+            
     def get_order(self):
         """
         Method gets order data from database
@@ -207,13 +222,54 @@ class twilio_handler():
 
     #def update_times_waited(self):
         #This class is to update the waiting times as the person waits
+    
+    def handle_messages(self):
+        print('handling messages')
+        print('the time now is' + str(datetime.datetime.now()))
+        print('the last message was at' + str(self.last_message_timing))
+        current_time = datetime.datetime.now()
+        last_time = self.last_message_timing
+        timedifference = -8
+        #print all messages between now and 5 seconds ago
+        messages = self.client.messages.list(
+                                            date_sent_before = datetime.datetime.now()+ datetime.timedelta(hours = timedifference),
+                                            date_sent_after = self.last_message_timing + datetime.timedelta(hours = timedifference)
+                                            )
+        print(len(messages))
+#        print(messages[-1])
+#        print('dionviownivneivn3290v92n9v390nv932n9v23v3290v32nv903n90vn90vn239v2n3')
+##        print(messages[-1].body)
+#        print('dionviownivneivn3290v92n9v390nv932n9v23v3290v32nv903n90vn90vn239v2n3')
+
+        
+
+        for record in messages:
+            if record.from_ != 'whatsapp:+14155238886':
+                self.last_message_timing = current_time
+                if record.body == '?':
+                    print('we gotta send this guy stuff')
+                    people_data = self.firebase.get_data('people_count')
+                    no_of_people = people_data['people_count']
+                    message = self.client.messages.create(
+                          body='The number of the people in the queue is {}'.format(no_of_people),
+                          from_='whatsapp:{sender_number}'.format(**self.config),
+                          to=record.from_
+                          )
+                print(record.from_)
+                print(record.date_sent)
+                print(record.body)
+        
+        
 
 
     def run(self):
         while self.running:
             self.parse_orders()
+            self.handle_messages()
             sleep(5)
 
 if __name__ == "__main__":
     a = twilio_handler()
     a.run()
+    
+

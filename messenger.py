@@ -33,7 +33,6 @@ import time
 DEBUG = True # turn on/off debugging lines
 UPDATE_RATE = 60 # seconds
 
-
 #=================CONSTANTS=====================#
 TWILIO_CREDENTIALS_PATH = "twilio_credentials.txt"
 STORE_NAME = "Western Food"

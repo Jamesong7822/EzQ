@@ -17,18 +17,28 @@ ScreenManager:
         manager: screen_manager
 
 <StartScreen>:
+    canvas.before:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     AnchorLayout:
         orientation:"vertical"
         anchor_x: "center"
         anchor_y: "center"
 
         Button:
+            background_normal: ""
+            background_color: [0.53,0.74,0.3,1]
             size_hint: (0.5, 0.25)
             id: start_btn
             text: "START"
+            font_size: dp(30)
             on_press:
                 root.manager.current="OrderCompletionScreen"
-                root.manager.ids.order_completion_screen.update_orders_layout()
+                root.manager.ids.order_completion_screen.start()
 
 <OrderDoneScreen>:
     BoxLayout:
@@ -36,6 +46,7 @@ ScreenManager:
 
         Label:
             text:"The order is completed"
+            font_size: dp(50)
 
         Button:
             text:"Return to previous"
@@ -43,14 +54,21 @@ ScreenManager:
                 root.go_back()
 
 <OrderCompletionScreen>:
+    canvas.before:
+        Color:
+            rgba: 1,1,1,1
+        Rectangle:
+            pos: self.pos
+            size: self.size
     BoxLayout:
         orientation: "vertical"
         id: boxy
 
         Label:
             text: "Uncompleted Orders"
-            font_size: dp(30)
+            font_size: dp(50)
             size_hint: (1, 0.2)
+            color: [0,0,0,1]
 
         BoxLayout:
             orientation: "vertical"
@@ -64,12 +82,16 @@ ScreenManager:
             size_hint: (1, 0.1)
 
             Button:
+                background_normal: ""
+                background_color: [0.74, 0.25,0.25, 1]
                 text: "Back"
                 size_hint: (0.5, 1)
                 on_release:
                     root.manager.current="StartScreen"
 
             Button:
+                background_normal: ""
+                background_color: [0, 0.75, 0, 1]
                 text: "Submit"
                 size_hint: (0.5, 1)
                 on_release:

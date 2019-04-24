@@ -32,7 +32,7 @@ The following pre-requisites are presumed to be pre-installed in your testing en
       - `Legacy`: This folder contains all our legacy code, which are our developmental code.
       - `YOLO3-4-Py`: Image-Object detection library.
 
-3. Type the following to install `opencv-python` and `cython`.
+3. Type the following to install `opencv-python`, `cython` and `twilio`.
 
    ```terminal
    pip3 install -r requirements.txt
@@ -88,14 +88,39 @@ This section will introduce in greater detail about our scripts as well as the r
 
 3. The following scripts must be ran separately but within the same step, before any inputs can be made (since they are `gui-s`). I**n short, they must be running prior to any inputs made.** 
 
-4. - `customer.py`: `Front-end GUI`for Customers to input their hand-phone number
+4. - `Customer.py`: `Front-end GUI`for Customers to input their hand-phone number
+
+     ```terminal
+     python3 Customer.py
+     ```
+
+   - `PIR new.py`: `PIR Sensor code` to simulate power-saving feature
+
+     ```terminal
+     python3 "PIR new.py"
+     ```
+
    - `cashier.py`: `Cashier side GUI` for Cashier to submit orders and tag it with phone number inputs from `customer.py`
+
+     ```terminal
+     python3 cashier.py
+     ```
+
    - `chefgui.py`: `Chef side GUI` for chef to update completed orders, which triggers `messenger.py`to prompt relevant customers through `Whatsapp`.
+
+     ```terminal
+     python3 chefgui.py
+     ```
+
    - `server.py`: `Cloud based or Local Computer based Backend`for running of the detection module to identify number of people in queue.
+
+     ```terminal
+     python3 server.py
+     ```
 
 ## Testing With Your WhatsApp Enabled Device
 
-This section will provide the instructions to set up your Whatsapp enabled device to access our services
+This section will provide the instructions to set up your `Whatsapp` enabled device to access our services.
 
 > **Note for future versions**
 > These set up steps are required for the trial version of twilio. If this project recieves additional funding these steps will not be required.
@@ -105,15 +130,15 @@ This section will provide the instructions to set up your Whatsapp enabled devic
       > This is the contact where you can get the number of people in the queue
       > You will be informed via this number when your food is completed
 
-2. Open WhatsApp
+2. Open `WhatsApp`
 3. Type `join gasoline-egg` and send
 
       > This allows you to join the sandbox and receive messages from our free number
 4. Type any message, for example `hello` and send it
 
-      > Whatsapp requires approval before sending messages that are unformatted.
+      > `Whatsapp` requires approval before sending messages that are unformatted.
       >
-      > This approval is given the moment a message is sent to the Twilio API
+      > This approval is given the moment a message is sent to the `Twilio` API
 5. Your number is now properly set up.
 6. To obtain the number of people in the queue, type `?` and send it to `Twilio Sandbox`
 

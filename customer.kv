@@ -3,7 +3,7 @@
 ScreenManager:
     id: screen_manager
     transition: NoTransition()
-    
+
     OrderScreen:
         id: order_screen
         name: "OrderScreen"
@@ -13,7 +13,7 @@ ScreenManager:
         id: submit_screen
         name: "SubmitScreen"
         manager: screen_manager
-    
+
 
 <OrderScreen>:
 
@@ -23,7 +23,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            
+
     orientation: "vertical"
     spacing: 50
 
@@ -35,12 +35,12 @@ ScreenManager:
             id: name
             text: "Western Store"
             font_size: 100
-            color: 0.96, 0.54, 0.41, 1             
+            color: 0.96, 0.54, 0.41, 1
 
         Image:
-            source: 'DW 1D-02-02.png'
+            source: 'DW 1D-02.png'
 
-                
+
         BoxLayout:
             orientation: 'horizontal'
             Label:
@@ -71,8 +71,8 @@ ScreenManager:
                 text: ''
                 size_hint_x: 0.5
 
-        
-                    
+
+
 
 <SubmitScreen>:
 
@@ -82,7 +82,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            
+
     BoxLayout:
         orientation: "vertical"
         Label:

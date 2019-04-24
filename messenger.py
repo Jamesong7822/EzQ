@@ -37,6 +37,7 @@ UPDATE_RATE = 60 # seconds
 #=================CONSTANTS=====================#
 TWILIO_CREDENTIALS_PATH = "twilio_credentials.txt"
 STORE_NAME = "Western Food"
+TIMEDIFFERENCE = -8 #The time difference between twilio and Singapore
 #===============================================#
 
 class twilio_handler():
@@ -224,43 +225,54 @@ class twilio_handler():
         #This class is to update the waiting times as the person waits
     
     def handle_messages(self):
-        print('handling messages')
-        print('the time now is' + str(datetime.datetime.now()))
-        print('the last message was at' + str(self.last_message_timing))
-        current_time = datetime.datetime.now()
-        last_time = self.last_message_timing
-        timedifference = -8
-        #print all messages between now and 5 seconds ago
-        messages = self.client.messages.list(
-                                            date_sent_before = datetime.datetime.now()+ datetime.timedelta(hours = timedifference),
-                                            date_sent_after = self.last_message_timing + datetime.timedelta(hours = timedifference)
-                                            )
-        print(len(messages))
-#        print(messages[-1])
-#        print('dionviownivneivn3290v92n9v390nv932n9v23v3290v32nv903n90vn90vn239v2n3')
-##        print(messages[-1].body)
-#        print('dionviownivneivn3290v92n9v390nv932n9v23v3290v32nv903n90vn90vn239v2n3')
-
+        """
+        Method handles incoming messages to the Twilio API
         
-
+        Parameters
+        ----------
+        None
+        
+        Calls
+        -----
+        datetime.datetime.now() : Method
+            Gets the current time in the format required by Twilio
+        datetime.timedelta(hours = TIMEDIFFERENCE)
+            Used the make a time difference in a format that can 
+            be added and subtracted from datetime objects
+        self.client.messages.create : Method
+            Creates message to send to customer
+        
+        """
+        
+        #Get the time at which the code started running
+        current_time = datetime.datetime.now()
+        
+        #get all messages between now and the time where a message was last received
+        messages = self.client.messages.list(
+                                            date_sent_before = datetime.datetime.now()+ datetime.timedelta(hours = TIMEDIFFERENCE),
+                                            date_sent_after = self.last_message_timing + datetime.timedelta(hours = TIMEDIFFERENCE)
+                                            )
+        
+        #Iterate through all the new messages
         for record in messages:
+            #If it is not from the Twilio Client
             if record.from_ != 'whatsapp:+14155238886':
+                #Then update the timing of the last message to the current time
                 self.last_message_timing = current_time
+                #If the message sent is the '?' that seeks to get the number 
+                #of people in the queue
                 if record.body == '?':
-                    print('we gotta send this guy stuff')
+                    #Get the data about people from firebase
                     people_data = self.firebase.get_data('people_count')
+                    #Get the number of people queueing
                     no_of_people = people_data['people_count']
+                    #Create a message from the API to tell the person
+                    #asking the number of people in the queue
                     message = self.client.messages.create(
                           body='The number of the people in the queue is {}'.format(no_of_people),
                           from_='whatsapp:{sender_number}'.format(**self.config),
                           to=record.from_
-                          )
-                print(record.from_)
-                print(record.date_sent)
-                print(record.body)
-        
-        
-
+                          )         
 
     def run(self):
         while self.running:

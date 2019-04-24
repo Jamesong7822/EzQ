@@ -21,6 +21,7 @@ import cv2
 import numpy as np
 import os
 import time
+import argparse
 
 from time import sleep
 from firebase import Firebase
@@ -133,6 +134,8 @@ class RPI():
                     self.firebase.update("snaptime", {"time": self.last_snap})
 
         else:
+            # Remove any pre-existing data
+            self.firebase.remove_data("image")
             data = cv2.imread(TEST_IMAGE_PATH)
             # print (data.shape)
             data_dict = self.convert_img_data(data)
@@ -164,8 +167,14 @@ class RPI():
         return img_dict
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--test", action="store_true")
+    args = parser.parse_args()
     R = RPI()
-    R.run()
+    if args.test:
+        R.run("test")
+    else:
+        R.run()
     cv2.destroyAllWindows()
     R.cap.release()
     elapsed_time = time.time()-R.start_time

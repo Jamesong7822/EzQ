@@ -124,6 +124,23 @@ class Firebase():
             key = "/".join(keys)
             self.db.child(key).update(data)
 
+    def remove_data(self, key):
+        """
+        Method removes data from selected key
+        in database
+
+        Parameters
+        ----------
+        - key : string
+            key of target data
+
+        Returns
+        -------
+        None
+        """
+
+        return self.db.child(key).remove()
+
     def get_data(self, key):
         """
         Method grabs data from selected key

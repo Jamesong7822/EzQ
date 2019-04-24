@@ -30,7 +30,6 @@ import time
 
 from firebase import prints
 
-from tqdm import tqdm
 from time import sleep
 from firebase import Firebase
 #-----------------------------------------------#

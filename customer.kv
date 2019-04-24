@@ -1,5 +1,9 @@
+#:import NoTransition kivy.uix.screenmanager.NoTransition
+
 ScreenManager:
     id: screen_manager
+    transition: NoTransition()
+    
     OrderScreen:
         id: order_screen
         name: "OrderScreen"
@@ -9,6 +13,7 @@ ScreenManager:
         id: submit_screen
         name: "SubmitScreen"
         manager: screen_manager
+    
 
 <OrderScreen>:
 
@@ -18,7 +23,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-
+            
     orientation: "vertical"
     spacing: 50
 
@@ -28,42 +33,46 @@ ScreenManager:
 
         Label:
             id: name
-            text: "Input your number"
-            font_size: 50
-            color: 0.1, 0.5, 0.81, 1
+            text: "Western Store"
+            font_size: 100
+            color: 0.96, 0.54, 0.41, 1             
 
         Image:
-            source: 'DW 1D-02.png'
+            source: 'DW 1D-02-02.png'
 
-
+                
         BoxLayout:
             orientation: 'horizontal'
             Label:
                 text: ''
-                size_hint_x: 2
+                size_hint_x: 0.5
             TextInput:
                 unfocus_on_touch: False
                 id: Phone
-                hint_text: "Phone number"
-                font_size: 40
+                hint_text: "Enter Phone Number"
+                font_size: 30
+                background_color: 1, 0.93, 0.75, 1
+                foreground_color: 1, 0.93, 0.75, 1
                 size_hint_x: 6
-                size_hint_y: None
-                height: 50
                 on_touch_down:
                     root.set_pop_up("Phone Number")
+            Button:
+                text: 'Submit'
+                color: 1, 1, 1, 1
+                font_size: 30
+                background_normal: ''
+                background_color: 0.55, 0.65, 0.7, 1
+                size_hint_x: 3
+                on_press:
+                    app.send_info(root.ids.Phone.text)
+                    root.ids.Phone.text=""
+                    root.manager.current="SubmitScreen"
             Label:
                 text: ''
-                size_hint_x: 2
+                size_hint_x: 0.5
 
-
-
-        Button:
-            text: "Submit"
-            font_size: 50
-            on_press:
-                app.send_info(root.ids.Phone.text)
-                root.ids.Phone.text=""
-                root.manager.current="SubmitScreen"
+        
+                    
 
 <SubmitScreen>:
 
@@ -73,7 +82,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-
+            
     BoxLayout:
         orientation: "vertical"
         Label:
@@ -82,7 +91,10 @@ ScreenManager:
             color: 0.1, 0.5, 0.81, 1
         Button:
             text: "Return"
+            color: 1, 1, 1, 1
             size_hint: (1, 0.2)
             font_size: 30
+            background_normal: ''
+            background_color: 0.55, 0.65, 0.7, 1
             on_press:
                 root.manager.current="OrderScreen"

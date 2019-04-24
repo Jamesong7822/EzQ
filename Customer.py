@@ -50,7 +50,7 @@ class OrderScreen(Screen):
 #        self.Label.text += instance.text
 
     def update_phone(self, instance):
-         """
+        """
         Input the phone number keyed in by the user into the text input box
         Parameters
         ----------

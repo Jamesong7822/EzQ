@@ -198,6 +198,11 @@ class twilio_handler():
         #Set the ready state to waiting for collection
         #self.firebase.db.child('orders').child('{store_name}'.format(**message_information)).child('{order_id}'.format(**message_information)).update({"ready":"waiting for collection"})
         self.firebase.update(["orders", STORE_NAME, message_information["order_id"]], {"ready": "waiting for collection"})
+        
+    #def update_times_waited(self):
+        #This class is to update the waiting times as the person waits
+        
+    
     def run(self):
         while self.running:
             self.parse_orders()

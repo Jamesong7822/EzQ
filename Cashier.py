@@ -47,14 +47,37 @@ FIREBASE.connect()
 
 class MenuScreen(Screen):
     def __init__(self, **kwargs):
+        """
+        Initialization of MenuScene as a Screen widget
+        
+        Attributes
+        ----------
+        - self.order           : str
+            Input order
+        - self.state           : str
+            State of toggle button
+        - self.additional_info : str
+            Input additional info for order
+        - self.popup           : None
+            Class attribute to store popup object
+        - self.btns            : list
+            List to store all buttons
+        - self.firebase        : object
+            Firebase object
+        """
         super(Screen, self).__init__()
+        
+        # Set up Variables
         self.order = StringProperty(None)
         self.state = StringProperty(None)
         self.additional_info = StringProperty(None)
         self.popup = None
         self.btns = []
+        
+        # Create a firebase object
         self.firebase = FIREBASE
-
+        
+        # Create ToggleButtons for each dish on the menu, store in the list self.btns and add to layout
         menu_list = ["Chicken Chop Spaghetti", "Grilled Fish Spaghetti", "Chicken Cubes with Rice", "Aglio Olio", "Mexican Chicken Chop", "Chicken Chop with Fries"]
         for i in menu_list:
             btn = ToggleButton(text=i, group="menu", font_size = 20, background_normal='', background_color=[0.96, 0.54, 0.41, 1], markup = True)
@@ -63,21 +86,91 @@ class MenuScreen(Screen):
             self.grid.add_widget(btn)
 
     def get_order(self, togglebutton):
+        """
+        Method to save the order of the customer to send to firebase
+        
+        Parameters
+        ----------
+        togglebutton : Widget
+            ToggleButton containing choice of order
+        
+        Function Calls
+        --------------
+        None
+        
+        Returns
+        -------
+        None
+        
+        """
+        
         tb = togglebutton
 
         self.order = str(tb.text)
         self.state = str(tb.state)
 
     def get_additional_info(self):
+        """
+        Method to save the additional information for customer's order
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        None
+        
+        Returns
+        -------
+        None
+        
+        """
         self.additional_info = str(self.ids.additional_info_input.text)
 
     def set_pop_up(self):
+        """
+        Method to conduct sanity check
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        self.popup_layout  : Method
+            Generate the popup layout
+        self.popup.open    : Method
+            Opens a popup
+        
+        Returns
+        -------
+        None
+        
+        """
         content = self.popup_layout()
         if not self.popup:
             self.popup = Popup(title="Warning", content=content, auto_dismiss=True, size_hint=(0.5, 0.5))
         self.popup.open()
 
     def popup_layout(self):
+        """
+        Method to add neccessary warning and widget to popup
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        None
+        
+        Returns
+        -------
+        layout   : BoxLayout
+            Layout of text and button
+        
+        """
         layout = BoxLayout(orientation="vertical")
         text = Label(text="Please select an order")
         btn = Button(text="OKAY!")
@@ -90,8 +183,27 @@ class MenuScreen(Screen):
         self.popup.dismiss()
 
     def check_order(self):
+        """
+        Method to confirm your order and transit to Submit Screen
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        self.set_pop_up   : Method
+            Method to conduct sanity check
+        self.manager.ids.submit_screen.update_nums_layout : Method
+            List out available phone numbers that has not been assigned orders
+            
+        Returns
+        -------
+        None
+        
+        """
         if self.state != "down":
-            self.set_pop_up()
+            self.set_pop_up()   
 
         else:
             self.reset()
@@ -100,10 +212,12 @@ class MenuScreen(Screen):
             self.manager.ids.submit_screen.order = self.order
             self.manager.ids.submit_screen.additional_info = self.additional_info
 
-    def submit_order(self):
-        pass
 
     def reset(self):
+        """
+        Method to reset the state of all Toggle Buttons and Text Input
+        
+        """
         for i in self.btns:
             if i.state == "down":
                 i.state = "normal"
@@ -115,6 +229,25 @@ class SubmitScreen(Screen):
     additional_info = StringProperty()
 
     def __init__(self, **kwargs):
+        """
+        Initialization of SubmitScreen as a Screen widget
+        
+        Attributes
+        ----------
+        - self.firebase        : object
+            Firebase object
+        - self.nums            : array
+            Array of phone numbers
+        - self.num             : str
+            Phone number of customer
+        - self.state           : str
+            State of toggle button
+        - self.popup           : None
+            Class attribute to store popup object
+        - self.nums_btns            : list
+            List to store all buttons
+
+        """
         super(Screen, self).__init__()
         self.firebase = FIREBASE
         self.nums = None
@@ -125,6 +258,23 @@ class SubmitScreen(Screen):
 
 
     def get_nums(self):
+        """
+        Method to get the phone numbers that has not been served
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        self.firebase.get_data   : Method
+            Obtain customers data
+            
+        Returns
+        -------
+        self.nums  : array
+            Array containing phone numbers
+        """
         # Clear pre-existing widgets
         if self.nums_btns:
             for x in self.nums_btns:
@@ -154,12 +304,29 @@ class SubmitScreen(Screen):
         return self.nums
 
     def bind_nums(self, togglebutton):
+        """
+        Method to save the selected number and customer id
+        """
         tb = togglebutton
         self.num = str(tb.text)
         self.state = str(tb.state)
         self.customer_id = tb.text.split(':')[0]
 
     def update_nums_layout(self):
+        """
+        Method to update the available numbers on the screen
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        self.get_nums   : Method
+            Get the phone numbers that has not been served
+        self.bind_nums  : Method
+            Save the selected number and customer id
+        """
         self.nums = self.get_nums()
         for num in self.nums:
             btn = ToggleButton(text=num, group="nums")
@@ -168,12 +335,48 @@ class SubmitScreen(Screen):
             self.ids.boxy.add_widget(btn)
 
     def set_pop_up(self):
+        """
+        Method to conduct sanity check
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        self.popup_layout  : Method
+            Generate the popup layout
+        self.popup.open    : Method
+            Opens a popup
+        
+        Returns
+        -------
+        None
+        
+        """
         content = self.popup_layout()
         if not self.popup:
             self.popup = Popup(title="Warning", content=content, auto_dismiss=True, size_hint=(0.5, 0.5))
         self.popup.open()
 
     def popup_layout(self):
+        """
+        Method to add neccessary warning and widget to popup
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        None
+        
+        Returns
+        -------
+        layout   : BoxLayout
+            Layout of text and button
+        
+        """
         layout = BoxLayout(orientation="vertical")
         text = Label(text="Please select a number")
         btn = Button(text="OKAY!")
@@ -183,6 +386,25 @@ class SubmitScreen(Screen):
         return layout
 
     def update(self):
+        """
+        Method to send order data to firebase
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        self.firebase.get_data  : Method
+            Get order data from firebase
+        self.firebase.update    : Method
+            Update information on firebase
+        
+        Returns
+        -------
+        None
+        
+        """
         # Get the current order ids
         order_data = self.firebase.get_data("orders")
         store_order_data = order_data[STORE_NAME]
@@ -211,6 +433,25 @@ class SubmitScreen(Screen):
         
 
     def check_nums(self):
+        """
+        Method to confirm your order and transit to Menu Screen
+        
+        Parameters
+        ----------
+        None
+        
+        Function Calls
+        --------------
+        self.set_pop_up   : Method
+            Method to conduct sanity check
+        self.update : Method
+            Send order data to firebase
+            
+        Returns
+        -------
+        None
+        
+        """
         if self.state != "down":
             self.set_pop_up()
 

@@ -92,3 +92,32 @@ This section will introduce in greater detail about our scripts as well as the r
    - `cashier.py`: `Cashier side GUI` for Cashier to submit orders and tag it with phone number inputs from `customer.py`
    - `chefgui.py`: `Chef side GUI` for chef to update completed orders, which triggers `messenger.py`to prompt relevant customers through `Whatsapp`.
    - `server.py`: `Cloud based or Local Computer based Backend`for running of the detection module to identify number of people in queue.
+
+## Testing With Your WhatsApp Enabled Device
+
+This section will provide the instructions to set up your Whatsapp enabled device to access our services
+
+> **Note for future versions**
+> These set up steps are required for the trial version of twilio. If this project recieves additional funding these steps will not be required.
+
+1. Add `+14155238886` as a contact
+      > You may want to save this contact as `Twilio Sandbox`.
+      > This is the contact where you can get the number of people in the queue
+      > You will be informed via this number when your food is completed
+
+2. Open WhatsApp
+3. Type `join gasoline-egg` and send
+
+      > This allows you to join the sandbox and receive messages from our free number
+4. Type any message, for example `hello` and send it
+
+      > Whatsapp requires approval before sending messages that are unformatted.
+      >
+      > This approval is given the moment a message is sent to the Twilio API
+5. Your number is now properly set up.
+6. To obtain the number of people in the queue, type `?` and send it to `Twilio Sandbox`
+
+      > Twilio Sandbox will reply you with the number of people in the queue
+
+
+

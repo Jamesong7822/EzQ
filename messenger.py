@@ -76,19 +76,19 @@ class twilio_handler():
         self.client = Client(self.config['account_sid'],self.config['auth_token'])
         self.running = True
         self.last_message_timing = datetime.datetime.now()
-        
+
 #        #print all messages between now and 5 seconds ago
 #        messages = self.client.messages.list(date_sent_before=datetime.datetime.now(),
 #                                           date_sent_after=datetime.datetime.now() - datetime.timedelta(seconds=5))
-#        
+#
 #        for record in messages:
 #            print(record.body)
-#        
+#
 #        #print a datetime
 #        print(datetime.datetime(2019, 4, 25, 0, 0))
 #
-        
-            
+
+
     def get_order(self):
         """
         Method gets order data from database
@@ -189,9 +189,11 @@ class twilio_handler():
 
         else:
             # Update time_waited
-            if order_details["order_time"] != "None":
-                time_elapsed = int(time.time()) - order_details["order_time"]
-                self.firebase.update(["orders", STORE_NAME, order_id], {"time_waited": time_elapsed})
+            order_time = order_details["order_time"]
+            if order_time != "None":
+                if order_details["ready"]!="true" or order_details["ready"]!="waiting for collection":
+                    time_elapsed = int(time.time()) - order_details["order_time"]
+                    self.firebase.update(["orders", STORE_NAME, order_id], {"time_waited": time_elapsed})
 
     def create_message(self,message_information):
         """
@@ -223,43 +225,43 @@ class twilio_handler():
 
     #def update_times_waited(self):
         #This class is to update the waiting times as the person waits
-    
+
     def handle_messages(self):
         """
         Method handles incoming messages to the Twilio API
-        
+
         Parameters
         ----------
         None
-        
+
         Calls
         -----
         datetime.datetime.now() : Method
             Gets the current time in the format required by Twilio
         datetime.timedelta(hours = TIMEDIFFERENCE)
-            Used the make a time difference in a format that can 
+            Used the make a time difference in a format that can
             be added and subtracted from datetime objects
         self.client.messages.create : Method
             Creates message to send to customer
-        
+
         """
-        
+
         #Get the time at which the code started running
         current_time = datetime.datetime.now()
-        
+
         #get all messages between now and the time where a message was last received
         messages = self.client.messages.list(
                                             date_sent_before = datetime.datetime.now()+ datetime.timedelta(hours = TIMEDIFFERENCE),
                                             date_sent_after = self.last_message_timing + datetime.timedelta(hours = TIMEDIFFERENCE)
                                             )
-        
+
         #Iterate through all the new messages
         for record in messages:
             #If it is not from the Twilio Client
             if record.from_ != 'whatsapp:+14155238886':
                 #Then update the timing of the last message to the current time
                 self.last_message_timing = current_time
-                #If the message sent is the '?' that seeks to get the number 
+                #If the message sent is the '?' that seeks to get the number
                 #of people in the queue
                 if record.body == '?':
                     #Get the data about people from firebase
@@ -272,7 +274,7 @@ class twilio_handler():
                           body='The number of the people in the queue is {}'.format(no_of_people),
                           from_='whatsapp:{sender_number}'.format(**self.config),
                           to=record.from_
-                          )         
+                          )
 
     def run(self):
         while self.running:
@@ -283,5 +285,3 @@ class twilio_handler():
 if __name__ == "__main__":
     a = twilio_handler()
     a.run()
-    
-

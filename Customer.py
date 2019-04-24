@@ -50,20 +50,20 @@ class OrderScreen(Screen):
 #        self.Label.text += instance.text
 
     def update_phone(self, instance):
-         """
+        """
         Input the phone number keyed in by the user into the text input box
         Parameters
         ----------
         instance                : object
              Button object
         """
-        # Inputs number that the user taps on the screen 
+        # Inputs number that the user taps on the screen
         self.ids.Phone.text += instance.text
-        
+
         # Inputs number that the user taps on the screen into the Label
         self.Label.text += instance.text
 
-        
+
     def keypad(self, title):
         """
         Create keypad layout
@@ -78,7 +78,7 @@ class OrderScreen(Screen):
         if self.ids.Phone.on_touch_down:
             if self.ids.Phone.text != '':
                 text = self.ids.Phone.text
-        
+
         # Creates Label widget on customer screen and displays text
         self.Label = Label(text=text, size_hint=(1, 0.2))
         layout.add_widget(self.Label)
@@ -106,7 +106,7 @@ class OrderScreen(Screen):
 
 
         return layout
-    
+
     def set_pop_up(self, title):
         """
         Create pop-up object
@@ -114,13 +114,13 @@ class OrderScreen(Screen):
         ----------
         title                : string
              Pop-up window title
-        
+
         Function call
         -------------
         self.keypad               : method
             Generates keypad layout
         """
-        
+
         content = self.keypad(title)
         if not self.popup:
             # Create pop-up object
@@ -131,8 +131,8 @@ class OrderScreen(Screen):
         else:
             # Set pop-up title
             self.popup.title = title
-            
-            # 
+
+            #
             self.popup.content = content
         self.popup.open()
 
@@ -148,18 +148,18 @@ class OrderScreen(Screen):
         ----------
         instance                : object
              Button object
-        
+
         """
         text = self.ids.Phone.text
-        
+
         # Removes last digit in phone number
         self.ids.Phone.text = text[:-1]
-        
+
         # Removes last digit in phone number and display the new text on screen
         self.Label.text = self.Label.text[:-1]
 
     def close_popup(self, instance):
-        
+
         # Closes pop-up screen when area outside of pop-up window is tapped
         self.popup.dismiss()
 
@@ -185,13 +185,13 @@ class CustomerApp(App):
         customer_data = self.firebase.get_data("customers")
         print(customer_data)
         used_ids = []
-        
+
         # Check if the mobile number of customer exists yet
         for customer_id, customer_data in customer_data.items():
             # If mobile number exists in database, the previous data is edited rather than create a new entry
-            if customer_data['mobile'] == '+65' + phone: 
+            if customer_data['mobile'] == '+65' + phone:
                 customer_data["served"] = False
-                
+
                 # Updates database
                 self.firebase.db.child('customers').child(customer_id).update(customer_data)
                 exists = True
@@ -199,9 +199,9 @@ class CustomerApp(App):
             #if not,
             else:
                 used_ids.append(customer_id)
-        
+
         new_id = None
-        
+
         # Prevents the creation of a new entry of a recurring customer
         if exists == False:
             #the phone number is new

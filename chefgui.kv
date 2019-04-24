@@ -1,0 +1,76 @@
+ScreenManager:
+    id: screen_manager
+
+    StartScreen:
+        id:start_screen
+        name:"StartScreen"
+        manager: screen_manager
+
+    OrderCompletionScreen:
+        id:order_completion_screen
+        name:"OrderCompletionScreen"
+        manager: screen_manager
+
+    OrderDoneScreen:
+        id:order_done_screen
+        name:"OrderDoneScreen"
+        manager: screen_manager
+
+<StartScreen>:
+    AnchorLayout:
+        orientation:"vertical"
+        anchor_x: "center"
+        anchor_y: "center"
+
+        Button:
+            size_hint: (0.5, 0.25)
+            id: start_btn
+            text: "START"
+            on_press:
+                root.manager.current="OrderCompletionScreen"
+                root.manager.ids.order_completion_screen.update_orders_layout()
+
+<OrderDoneScreen>:
+    BoxLayout:
+        orientation: "vertical"
+
+        Label:
+            text:"The order is completed"
+
+        Button:
+            text:"Return to previous"
+            on_release:
+                root.go_back()
+
+<OrderCompletionScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        id: boxy
+
+        Label:
+            text: "Uncompleted Orders"
+            font_size: dp(30)
+            size_hint: (1, 0.2)
+
+        BoxLayout:
+            orientation: "vertical"
+            id: boxy
+            spacing: 20
+            padding: 20
+            size_hint:(1, 0.7)
+
+        BoxLayout:
+            orientation: "horizontal"
+            size_hint: (1, 0.1)
+
+            Button:
+                text: "Back"
+                size_hint: (0.5, 1)
+                on_release:
+                    root.manager.current="StartScreen"
+
+            Button:
+                text: "Submit"
+                size_hint: (0.5, 1)
+                on_release:
+                    root.check_orders()

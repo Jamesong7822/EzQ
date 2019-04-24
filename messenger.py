@@ -171,6 +171,11 @@ class twilio_handler():
             #Create the message
             self.create_message(message_information)
 
+        else:
+            # Update time_waited
+            time_elapsed = int(time.time()) - order_details["order_time"]
+            self.firebase.update(["orders", STORE_NAME, order_id], {"time_waited": time_elapsed})
+
     def create_message(self,message_information):
         """
         Method creates message for specified customer

@@ -1,6 +1,4 @@
 from firebase import Firebase
-import time
-from threading import Thread
 
 firebaseInstance = Firebase()
 firebaseInstance.connect()

@@ -206,16 +206,19 @@ class SubmitScreen(Screen):
 
     def close_popup(self, *args):
         self.popup.dismiss()
-        
+
+class  StartScreen(Screen):
+    pass
+    
 #This screen is just a buffer to update that it is done
 class OrderDoneScreen(Screen):
-    
+
     def __init__(self, **kwargs):
         #Init the parent class
         super(Screen, self).__init__()
 #        self.manager.current = "OrderCompletionScreen"
 #        self.go_back()
-        
+
     def go_back(self):
 #        sleep(1)
         self.manager.ids.order_completion_screen.update_orders_layout()
@@ -236,13 +239,13 @@ class OrderCompletionScreen(Screen):
         self.popup = None
         self.order_btns = []
         #Get the information from the internet
-        self.update_orders_layout()
+        #self.update_orders_layout()
 
 
     def get_orders(self):
         print('GETTING NUMS')
         # Clear pre-existing widgets
-       
+
 #        if self.order_btns:
 #            for x in self.order_btns:
 #                self.ids.boxy.remove_widget(x)
@@ -309,7 +312,7 @@ class OrderCompletionScreen(Screen):
         # Get the current order ids
         order_data = self.firebase.get_data("orders")
         store_order_data = order_data[STORE_NAME]
-        
+
 #        try:
         order_data = self.firebase.get_data("orders")
         store_order_data = order_data[STORE_NAME]
@@ -319,7 +322,7 @@ class OrderCompletionScreen(Screen):
         phone_num = customer_data[customer_id]['mobile']
         print('we will send a message to ' + phone_num + ' through twilio')
         self.firebase.db.child('orders').child('{}'.format(STORE_NAME)).child('{}'.format(self.selected_order_id)).update({"ready":True})
-        
+
 #        # Used ids
 #        used_ids = []
 #        for order_id,item in store_order_data.items():
@@ -361,7 +364,7 @@ class OrderCompletionScreen(Screen):
     def close_popup(self, *args):
         self.popup.dismiss()
 
-class chefGUIApp(App):
+class ChefguiApp(App):
 
     def __init__(self):
         super().__init__()
@@ -371,5 +374,5 @@ class chefGUIApp(App):
         pass
 
 if __name__ == "__main__":
-    a = chefGUIApp()
+    a = ChefguiApp()
     a.run()
